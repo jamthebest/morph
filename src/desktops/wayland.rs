@@ -4,7 +4,9 @@
 use std::sync::OnceLock;
 use std::sync::atomic::Ordering;
 
-use cosmic::cctk::cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_handle_v1::State as ToplevelState;
+use cosmic::cctk::cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_handle_v1::{
+    State as ToplevelState, ZcosmicToplevelHandleV1,
+};
 use cosmic::cctk::cosmic_protocols::toplevel_management::v1::client::zcosmic_toplevel_manager_v1::ZcosmicToplelevelManagementCapabilitiesV1 as Cap;
 use cosmic::cctk::{
     self,
@@ -234,11 +236,7 @@ impl State {
         }
     }
 
-    fn cosmic_toplevel(
-        &self,
-        id: u32,
-    ) -> Option<cctk::cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_handle_v1::ZcosmicToplevelHandleV1>
-    {
+    fn cosmic_toplevel(&self, id: u32) -> Option<ZcosmicToplevelHandleV1> {
         let h = self.win_handles.get(id as usize)?;
         self.toplevel_info_state.info(h)?.cosmic_toplevel.clone()
     }
