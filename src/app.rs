@@ -2911,7 +2911,7 @@ impl App {
             .push(widget::icon::from_name(vol_icon).size(18).symbolic(true))
             .push(
                 widget::slider(
-                    0.0..=100.0,
+                    0.0f32..=100.0,
                     (self.volume.min(1.0) * 100.0).round(),
                     Message::VolumeChanged,
                 )

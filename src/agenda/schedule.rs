@@ -111,12 +111,7 @@ pub fn due(a: &Agenda, from: NaiveDateTime, to: NaiveDateTime) -> Vec<Due> {
 pub fn on_fired(a: &mut Agenda, d: &Due) {
     if let Some(it) = a.items.iter_mut().find(|i| i.id == d.id) {
         it.snooze_until = None;
-        if let Kind::Alarm {
-            days,
-            enabled,
-            once_on: _,
-            ..
-        } = &mut it.kind
+        if let Kind::Alarm { days, enabled, .. } = &mut it.kind
             && d.kind == DueKind::Alarm
             && !days.iter().any(|&x| x)
         {
