@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.jamthebest.Morph</id>
+  <replaces>
+    <id>dev.jam.Morph</id>
+  </replaces>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+  <name>Morph</name>
+  <summary>A dynamic island for the COSMIC desktop</summary>
+  <summary xml:lang="es">Una isla dinámica para el escritorio COSMIC</summary>
+  <developer id="io.github.jamthebest">
+    <name>Javier Midence</name>
+  </developer>
+  <description>
+    <p>Morph is a dynamic island that lives at the top of your COSMIC desktop. It expands to show media playback, notifications, calendar, a file shelf, workspaces and developer tools, and collapses out of the way when you are done.</p>
+    <p xml:lang="es">Morph es una isla dinámica que vive en la parte superior de tu escritorio COSMIC. Se expande para mostrar la reproducción multimedia, notificaciones, calendario, una repisa de archivos, escritorios y herramientas de desarrollo, y se contrae cuando terminas.</p>
+  </description>
+  <launchable type="desktop-id">io.github.jamthebest.Morph.desktop</launchable>
+  <url type="homepage">https://github.com/jamthebest/morph</url>
+  <url type="vcs-browser">https://github.com/jamthebest/morph</url>
+  <url type="bugtracker">https://github.com/jamthebest/morph/issues</url>
+  <url type="donation">https://ko-fi.com/jamthebest</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption>The Morph pill at the top of the screen</caption>
+      <image type="source">https://raw.githubusercontent.com/jamthebest/morph/v0.2.0/docs/screenshots/pill.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Media playback controls</caption>
+      <image type="source">https://raw.githubusercontent.com/jamthebest/morph/v0.2.0/docs/screenshots/music.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Calendar and upcoming events</caption>
+      <image type="source">https://raw.githubusercontent.com/jamthebest/morph/v0.2.0/docs/screenshots/calendar.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Tasks to do</caption>
+      <image type="source">https://raw.githubusercontent.com/jamthebest/morph/v0.2.0/docs/screenshots/todo.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>File shelf for drag and drop</caption>
+      <image type="source">https://raw.githubusercontent.com/jamthebest/morph/v0.2.0/docs/screenshots/shelf.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Settings panel</caption>
+      <image type="source">https://raw.githubusercontent.com/jamthebest/morph/v0.2.0/docs/screenshots/settings.png</image>
+    </screenshot>
+  </screenshots>
+  <branding>
+    <color type="primary" scheme_preference="light">#8fb4ff</color>
+    <color type="primary" scheme_preference="dark">#1b222c</color>
+  </branding>
+  <categories>
+    <category>Utility</category>
+  </categories>
+  <provides>
+    <binary>morph</binary>
+  </provides>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.2.0" date="2026-11-02">
+      <description>
+        <p>New app ID io.github.jamthebest.Morph; settings migrate automatically.</p>
+      </description>
+    </release>
+    <release version="0.1.0" date="2026-11-01"/>
+  </releases>
+</component>

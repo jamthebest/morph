@@ -8,16 +8,19 @@ use super::gitlab::{GlError, GlToken};
 
 pub fn attributes(host: &str) -> [(&'static str, String); 3] {
     [
-        ("application", "dev.jam.Morph".to_string()),
+        ("application", crate::app::APP_ID.to_string()),
         ("service", "gitlab".to_string()),
         ("host", host.to_string()),
     ]
 }
 
-/// Atributos del elemento antiguo (cuando la app se llamaba Isla); solo para migrar.
-pub fn legacy_attributes(host: &str) -> [(&'static str, String); 3] {
+/// IDs de aplicación antiguos, del más reciente al más antiguo; solo para migrar.
+pub const LEGACY_APPLICATION_IDS: [&str; 2] = ["dev.jam.Morph", "dev.jam.Isla"];
+
+/// Atributos del elemento guardado bajo un ID antiguo; solo para migrar.
+pub fn legacy_attributes(host: &str, application: &str) -> [(&'static str, String); 3] {
     let mut a = attributes(host);
-    a[0].1 = "dev.jam.Isla".to_string();
+    a[0].1 = application.to_string();
     a
 }
 
@@ -56,18 +59,25 @@ pub async fn load(host: &str) -> Result<Option<GlToken>, GlError> {
     Ok(Some(GlToken::new(s)))
 }
 
-/// Migración única: si hay un elemento antiguo (`application=dev.jam.Isla`) para `host`, lo
-/// guarda con los atributos y la etiqueta nuevos y borra el antiguo.
+/// Migración única: si hay un elemento con algún `application` antiguo para `host`, lo guarda
+/// con los atributos y la etiqueta nuevos y borra los antiguos.
 async fn migrate_legacy(
     col: &secret_service::Collection<'_>,
     host: &str,
 ) -> Result<Option<GlToken>, GlError> {
-    let old_attrs = legacy_attributes(host);
-    let old = col
-        .search_items(attrs_map(&old_attrs))
-        .await
-        .map_err(|_| GlError::Keyring)?;
-    let Some(item) = old.first() else {
+    let mut found = None;
+    for app in LEGACY_APPLICATION_IDS {
+        let old_attrs = legacy_attributes(host, app);
+        let old = col
+            .search_items(attrs_map(&old_attrs))
+            .await
+            .map_err(|_| GlError::Keyring)?;
+        if let Some(item) = old.into_iter().next() {
+            found = Some(item);
+            break;
+        }
+    }
+    let Some(item) = found else {
         return Ok(None);
     };
     item.ensure_unlocked().await.map_err(|_| GlError::Keyring)?;
@@ -124,13 +134,15 @@ pub async fn forget(host: &str) -> Result<(), GlError> {
         item.delete().await.map_err(|_| GlError::Keyring)?;
     }
     // Un elemento antiguo sin migrar reaparecería al cargar: se borra también.
-    let old_attrs = legacy_attributes(host);
-    let old = col
-        .search_items(attrs_map(&old_attrs))
-        .await
-        .map_err(|_| GlError::Keyring)?;
-    for item in old {
-        item.delete().await.map_err(|_| GlError::Keyring)?;
+    for app in LEGACY_APPLICATION_IDS {
+        let old_attrs = legacy_attributes(host, app);
+        let old = col
+            .search_items(attrs_map(&old_attrs))
+            .await
+            .map_err(|_| GlError::Keyring)?;
+        for item in old {
+            item.delete().await.map_err(|_| GlError::Keyring)?;
+        }
     }
     Ok(())
 }
@@ -145,13 +157,21 @@ mod tests {
         assert_eq!(
             attributes("gitlab.com"),
             [
-                ("application", "dev.jam.Morph".to_string()),
+                ("application", "io.github.jamthebest.Morph".to_string()),
                 ("service", "gitlab".to_string()),
                 ("host", "gitlab.com".to_string()),
             ]
         );
-        assert_eq!(legacy_attributes("h")[0].1, "dev.jam.Isla");
-        assert_eq!(legacy_attributes("h")[2], ("host", "h".to_string()));
+        assert_eq!(LEGACY_APPLICATION_IDS, ["dev.jam.Morph", "dev.jam.Isla"]);
+        assert_eq!(legacy_attributes("h", "dev.jam.Isla")[0].1, "dev.jam.Isla");
+        assert_eq!(
+            legacy_attributes("h", "dev.jam.Morph")[0].1,
+            "dev.jam.Morph"
+        );
+        assert_eq!(
+            legacy_attributes("h", "dev.jam.Isla")[2],
+            ("host", "h".to_string())
+        );
         assert_eq!(
             label("gitlab.example.org"),
             "Morph · GitLab (gitlab.example.org)"

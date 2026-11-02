@@ -116,7 +116,8 @@ impl GhError {
     /// Texto para la interfaz; `age_min` = minutos desde el último dato bueno.
     pub fn message(&self, age_min: Option<u64>) -> String {
         match self {
-            GhError::NoGh | GhError::NotLoggedIn => crate::fl!("gh-err-login"),
+            GhError::NoGh => crate::fl!("gh-err-not-installed"),
+            GhError::NotLoggedIn => crate::fl!("gh-err-login"),
             GhError::Network(_) => match age_min {
                 Some(n) => crate::fl!("dev-err-offline-ago", n = n),
                 None => crate::fl!("dev-err-offline"),
@@ -395,7 +396,7 @@ pub async fn token_for(user: Option<&str>) -> Result<String, GhError> {
 async fn token_timeout(user: Option<&str>) -> Result<String, GhError> {
     tokio::time::timeout(std::time::Duration::from_secs(10), token_for(user))
         .await
-        .unwrap_or(Err(GhError::NoGh))
+        .unwrap_or_else(|_| Err(GhError::Network("gh no respondió".into())))
 }
 
 /// Carpeta de configuración de `gh` (`$GH_CONFIG_DIR`, `$XDG_CONFIG_HOME/gh` o `~/.config/gh`).
@@ -939,7 +940,10 @@ mod tests {
     fn error_messages_do_not_leak() {
         crate::i18n::apply_for_test("es");
         assert!(GhError::NotLoggedIn.message(None).contains("gh auth login"));
-        assert!(GhError::NoGh.message(None).contains("gh auth login"));
+        assert!(GhError::NoGh.message(None).contains("no está instalado"));
+        crate::i18n::apply_for_test("en");
+        assert!(GhError::NoGh.message(None).contains("not installed"));
+        crate::i18n::apply_for_test("es");
         assert_eq!(
             GhError::Network("x".into()).message(Some(3)),
             "sin conexión · hace 3 min"

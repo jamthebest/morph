@@ -35,6 +35,26 @@ Morph is a dynamic island for the [COSMIC](https://system76.com/cosmic) desktop 
 
 ## Install
 
+### Install with apt (recommended)
+
+Pop!_OS and Ubuntu users get new versions with a normal `sudo apt upgrade`:
+
+```sh
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl -fsSL https://jamthebest.github.io/morph/morph-archive-keyring.gpg -o /etc/apt/keyrings/morph.gpg
+sudo tee /etc/apt/sources.list.d/morph.sources >/dev/null <<'EOF'
+Types: deb
+URIs: https://jamthebest.github.io/morph
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/morph.gpg
+EOF
+sudo apt update && sudo apt install morph
+```
+
+Installing the `.deb` from Releases (below) also adds this repository automatically.
+
 ### From a release (.deb)
 
 Download `morph_<version>_<arch>.deb` and `SHA256SUMS` from the [Releases](https://github.com/jamthebest/morph/releases) page, then:
@@ -62,17 +82,19 @@ Turn on the autostart switch in Morph's settings. The installer does not enable 
 
 ## Uninstall
 
-- `.deb`: `sudo apt remove morph`
+- `.deb` / apt: `sudo apt remove morph`. If you added the repository by hand, also delete `/etc/apt/sources.list.d/morph.sources` and `/etc/apt/keyrings/morph.gpg` (the `.deb` removes its own copy with `sudo apt purge morph`).
 - `just install`: `just uninstall`
 
 Neither removes your configuration or data. To delete them:
 
 ```sh
-rm -rf ~/.config/cosmic/dev.jam.Morph ~/.local/share/morph
-rm -f ~/.config/autostart/dev.jam.Morph.desktop
+rm -rf ~/.config/cosmic/io.github.jamthebest.Morph ~/.local/share/morph
+rm -f ~/.config/autostart/io.github.jamthebest.Morph.desktop
 ```
 
-If you saved a GitLab token, forget it first in Settings → GitLab (or remove the `dev.jam.Morph` entry from your keyring).
+Old versions stored settings in `~/.config/cosmic/dev.jam.Morph` and `~/.config/cosmic/dev.jam.Isla`; Morph copies them on first run and leaves them in place, so you can delete them manually.
+
+If you saved a GitLab token, forget it first in Settings → GitLab (or remove the `io.github.jamthebest.Morph` entry from your keyring).
 
 ## Usage
 

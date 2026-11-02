@@ -35,6 +35,26 @@ Morph es una isla dinámica para el escritorio [COSMIC](https://system76.com/cos
 
 ## Instalación
 
+### Instalar con apt (recomendado)
+
+En Pop!_OS y Ubuntu las versiones nuevas llegan con un simple `sudo apt upgrade`:
+
+```sh
+sudo install -d -m 0755 /etc/apt/keyrings
+sudo curl -fsSL https://jamthebest.github.io/morph/morph-archive-keyring.gpg -o /etc/apt/keyrings/morph.gpg
+sudo tee /etc/apt/sources.list.d/morph.sources >/dev/null <<'EOF'
+Types: deb
+URIs: https://jamthebest.github.io/morph
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /etc/apt/keyrings/morph.gpg
+EOF
+sudo apt update && sudo apt install morph
+```
+
+Instalar el `.deb` de las Releases (abajo) también añade este repositorio automáticamente.
+
 ### Desde una release (.deb)
 
 Descarga `morph_<versión>_<arq>.deb` y `SHA256SUMS` desde la página de [Releases](https://github.com/jamthebest/morph/releases) y ejecuta:
@@ -62,17 +82,19 @@ Activa el interruptor de autoinicio en los ajustes de Morph. El instalador no lo
 
 ## Desinstalación
 
-- `.deb`: `sudo apt remove morph`
+- `.deb` / apt: `sudo apt remove morph`. Si añadiste el repositorio a mano, borra también `/etc/apt/sources.list.d/morph.sources` y `/etc/apt/keyrings/morph.gpg` (el `.deb` elimina su propia copia con `sudo apt purge morph`).
 - `just install`: `just uninstall`
 
 Ninguno borra tu configuración ni tus datos. Para eliminarlos:
 
 ```sh
-rm -rf ~/.config/cosmic/dev.jam.Morph ~/.local/share/morph
-rm -f ~/.config/autostart/dev.jam.Morph.desktop
+rm -rf ~/.config/cosmic/io.github.jamthebest.Morph ~/.local/share/morph
+rm -f ~/.config/autostart/io.github.jamthebest.Morph.desktop
 ```
 
-Si guardaste un token de GitLab, olvídalo antes en Ajustes → GitLab (o borra la entrada `dev.jam.Morph` de tu llavero).
+Las versiones antiguas guardaban los ajustes en `~/.config/cosmic/dev.jam.Morph` y `~/.config/cosmic/dev.jam.Isla`; Morph los copia en el primer arranque y los deja en su sitio, así que puedes borrarlos a mano.
+
+Si guardaste un token de GitLab, olvídalo antes en Ajustes → GitLab (o borra la entrada `io.github.jamthebest.Morph` de tu llavero).
 
 ## Uso
 

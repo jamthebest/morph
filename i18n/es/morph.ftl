@@ -367,6 +367,7 @@ dev-stop-failed = No se pudo detener el proceso
 
 # GitHub
 gh-err-login = Inicia sesión con `gh auth login`
+gh-err-not-installed = gh no está instalado
 gh-err-rate-limited = Límite de GitHub · reintento luego
 gh-err-query = Algún repo no existe o no tienes acceso
 gh-err-http = GitHub respondió { $code }

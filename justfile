@@ -3,7 +3,7 @@ default: run
 # Prefijos de instalación de usuario (se pueden cambiar con HOME)
 bin := env_var('HOME') / ".local/bin"
 share := env_var('HOME') / ".local/share"
-app_id := "dev.jam.Morph"
+app_id := "io.github.jamthebest.Morph"
 
 run:
     cargo run

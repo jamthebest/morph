@@ -8,8 +8,9 @@ use crate::config::{DesktopsLayout, DevLayout, HudStyle, Language, Pin, ShelfLay
 use crate::island::Page;
 
 /// Plantilla del archivo de autostart (el mismo del paquete); su `Exec=` se reemplaza.
-const AUTOSTART_TEMPLATE: &str = include_str!("../../resources/dev.jam.Morph-autostart.desktop");
-const AUTOSTART_FILE: &str = "dev.jam.Morph.desktop";
+const AUTOSTART_TEMPLATE: &str =
+    include_str!("../../resources/io.github.jamthebest.Morph-autostart.desktop");
+const AUTOSTART_FILE: &str = "io.github.jamthebest.Morph.desktop";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Section {
@@ -541,7 +542,7 @@ mod tests {
         assert!(!autostart_enabled(&dir));
         set_autostart(&dir, true).unwrap();
         assert!(autostart_enabled(&dir));
-        let body = std::fs::read_to_string(dir.join("dev.jam.Morph.desktop")).unwrap();
+        let body = std::fs::read_to_string(dir.join("io.github.jamthebest.Morph.desktop")).unwrap();
         let exe = std::env::current_exe().unwrap();
         assert_eq!(body, autostart_contents(Some(&exe)));
         set_autostart(&dir, false).unwrap();

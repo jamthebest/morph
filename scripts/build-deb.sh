@@ -5,7 +5,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 ROOT=$PWD
-APP_ID=dev.jam.Morph
+APP_ID=io.github.jamthebest.Morph
 
 VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)
 ARCH=$(dpkg --print-architecture)
@@ -54,6 +54,28 @@ License: GPL-3.0-only
  Third-party components are listed in THIRD-PARTY-LICENSES.md.gz.
 COPYRIGHT
 chmod 644 "$DOC/copyright"
+
+# Suscripción al repositorio APT (como Chrome o VS Code): llave + fuente deb822 (conffile).
+APT_KEY_ASC=$ROOT/resources/apt/morph-archive-keyring.asc
+if [ -f "$APT_KEY_ASC" ]; then
+    install -d -m755 "$PKG/usr/share/keyrings"
+    gpg --dearmor < "$APT_KEY_ASC" > "$PKG/usr/share/keyrings/morph-archive-keyring.gpg"
+    chmod 644 "$PKG/usr/share/keyrings/morph-archive-keyring.gpg"
+    install -d -m755 "$PKG/etc/apt/sources.list.d"
+    cat > "$PKG/etc/apt/sources.list.d/morph.sources" <<SOURCES
+Types: deb
+URIs: https://jamthebest.github.io/morph
+Suites: stable
+Components: main
+Architectures: amd64
+Signed-By: /usr/share/keyrings/morph-archive-keyring.gpg
+SOURCES
+    chmod 644 "$PKG/etc/apt/sources.list.d/morph.sources"
+    mkdir -p "$PKG/DEBIAN"
+    echo /etc/apt/sources.list.d/morph.sources > "$PKG/DEBIAN/conffiles"
+else
+    echo "aviso: falta resources/apt/morph-archive-keyring.asc; el .deb se construye sin la fuente APT" >&2
+fi
 
 # Depends calculado con dpkg-shlibdeps (necesita un debian/control mínimo)
 mkdir -p "$STAGE/debian"

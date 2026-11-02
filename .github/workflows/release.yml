@@ -28,9 +28,78 @@ jobs:
       - name: Generate checksums
         working-directory: dist
         run: sha256sum ./*.deb > SHA256SUMS
+      - name: Keep the .deb for the APT job
+        uses: actions/upload-artifact@v4
+        with:
+          name: deb
+          path: dist/*.deb
+          if-no-files-found: error
       - name: Upload to the release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/*.deb
             dist/SHA256SUMS
+
+  apt:
+    needs: deb
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    concurrency:
+      group: apt-repo
+      cancel-in-progress: false
+    env:
+      APT_GPG_PRIVATE_KEY: ${{ secrets.APT_GPG_PRIVATE_KEY }}
+      APT_GPG_PASSPHRASE: ${{ secrets.APT_GPG_PASSPHRASE }}
+    steps:
+      - name: Require the signing key
+        run: |
+          if [ -z "$APT_GPG_PRIVATE_KEY" ]; then
+            echo "::error::Missing secret APT_GPG_PRIVATE_KEY. Refusing to publish an unsigned APT repository (see docs/apt-setup.md)."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          path: src
+      - uses: actions/download-artifact@v4
+        with:
+          name: deb
+          path: debs
+      - name: Install apt-utils
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends apt-utils gnupg
+      - name: Check out gh-pages (create it if missing)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$remote" gh-pages >/dev/null 2>&1; then
+            git clone --quiet --branch gh-pages "$remote" site
+          else
+            git init --quiet --initial-branch gh-pages site
+            git -C site remote add origin "$remote"
+          fi
+      - name: Import the signing key
+        run: |
+          printf '%s' "$APT_GPG_PRIVATE_KEY" | gpg --batch --import
+          fpr=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/{print $10; exit}')
+          [ -n "$fpr" ] || { echo "::error::No secret key could be imported from APT_GPG_PRIVATE_KEY."; exit 1; }
+          echo "APT_GPG_KEY_ID=$fpr" >> "$GITHUB_ENV"
+      - name: Update the APT repository
+        run: src/scripts/apt-repo.sh debs site
+      - name: Commit and push to gh-pages (no force push)
+        run: |
+          cd site
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to publish"
+            exit 0
+          fi
+          git commit -q -m "apt: ${GITHUB_REF_NAME}"
+          git push origin HEAD:gh-pages

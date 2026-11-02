@@ -60,7 +60,7 @@ use chrono::Datelike;
 use cosmic::widget::image::Handle;
 use tokio::sync::mpsc::UnboundedSender;
 
-pub const APP_ID: &str = "dev.jam.Morph";
+pub const APP_ID: &str = "io.github.jamthebest.Morph";
 
 const PILL_RADIUS: f32 = 18.0;
 /// Radio de la línea del modo oculto.

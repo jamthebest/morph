@@ -31,6 +31,8 @@ mod term;
 mod volume;
 
 fn main() -> cosmic::iced::Result {
+    // Antes de cualquier `cosmic_config::Config::new`, que crea el directorio de config nuevo.
+    migrate::run();
     let settings = cosmic::app::Settings::default()
         .no_main_window(true)
         .exit_on_close(false);
@@ -51,6 +53,5 @@ fn main() -> cosmic::iced::Result {
             std::process::exit(2);
         }
     };
-    migrate::run();
     cosmic::app::run_single_instance::<app::App>(settings, app::Flags::new(action))
 }
