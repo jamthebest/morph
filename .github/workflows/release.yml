@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  deb:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake pkg-config dpkg-dev binutils \
+            libxkbcommon-dev libwayland-dev libudev-dev libinput-dev \
+            libfontconfig-dev libfreetype-dev libexpat1-dev libdbus-1-dev
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build .deb
+        run: scripts/build-deb.sh
+      - name: Generate checksums
+        working-directory: dist
+        run: sha256sum ./*.deb > SHA256SUMS
+      - name: Upload to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.deb
+            dist/SHA256SUMS

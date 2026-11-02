@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Morph
+Comment=A dynamic island for the COSMIC desktop
+Comment[es]=Una isla dinámica para el escritorio COSMIC
+Exec=morph
+Icon=dev.jam.Morph
+Terminal=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

@@ -1,0 +1,32 @@
+[package]
+name = "morph"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.93"
+description = "A dynamic island for the COSMIC desktop: media, notifications, calendar, shelf and more"
+license = "GPL-3.0-only"
+repository = "https://github.com/jamthebest/morph"
+homepage = "https://github.com/jamthebest/morph"
+readme = "README.md"
+keywords = ["cosmic", "dynamic-island", "wayland", "desktop"]
+categories = ["gui"]
+
+[dependencies]
+libcosmic = { git = "https://github.com/pop-os/libcosmic", default-features = false, features = ["autosize", "dbus-config", "tokio", "wayland", "multi-window", "winit", "single-instance"] }
+cosmic-config = { git = "https://github.com/pop-os/libcosmic" }
+chrono = { version = "0.4", features = ["serde"] }
+url = "2"
+libc = "0.2"
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["process", "macros", "time", "rt", "sync"] }
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "json"] }
+serde_json = "1.0.154"
+mpris2-zbus = { git = "https://github.com/pop-os/dbus-settings-bindings", rev = "eed01dd" }
+zbus = { version = "5", default-features = false, features = ["tokio"] }
+mime_guess = "2.0.5"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "gif", "bmp"] }
+alacritty_terminal = "0.26"
+secret-service = { version = "5", features = ["rt-tokio-crypto-rust"] }
+i18n-embed = { version = "0.16.0", features = ["fluent-system", "desktop-requester"] }
+i18n-embed-fl = "0.10"
+rust-embed = { version = "8.11.0", features = ["debug-embed"] }

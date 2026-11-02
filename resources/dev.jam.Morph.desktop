@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Morph
+Comment=A dynamic island for the COSMIC desktop
+Comment[es]=Una isla dinámica para el escritorio COSMIC
+Exec=morph
+Icon=dev.jam.Morph
+Categories=Utility;
+Keywords=island;dynamic;widgets;media;notifications;
+Keywords[es]=isla;dinámica;widgets;multimedia;notificaciones;
+Terminal=false
+StartupNotify=false
