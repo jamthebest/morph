@@ -2915,7 +2915,7 @@ impl App {
                     (self.volume.min(1.0) * 100.0).round(),
                     Message::VolumeChanged,
                 )
-                .step(1.0)
+                .step(1.0_f32)
                 .on_release(Message::VolumeReleased)
                 .width(Length::Fill),
             );
