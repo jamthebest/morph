@@ -1,0 +1,20 @@
+Architectures: amd64
+Codename: stable
+Components: main
+Date: Mon, 02 Nov 2026 22:29:13 +0000
+Description: Morph dynamic island for COSMIC
+Label: Morph
+Origin: Morph
+Suite: stable
+MD5Sum:
+ f0644e924de2b5fb0a417c10d181e392             1013 main/binary-amd64/Packages
+ 20c251ec3eb29e6fe326053164b6f174              696 main/binary-amd64/Packages.gz
+SHA1:
+ 7cab546a05ff27394dc53d29644931a75130195a             1013 main/binary-amd64/Packages
+ 2874f04f845488d2d4af5f05c6791a3c01dec059              696 main/binary-amd64/Packages.gz
+SHA256:
+ f4ba9f1ea6dd3e755ec08106f0dce65aded7c3bfd63ffdcf61d3041a1418e836             1013 main/binary-amd64/Packages
+ 96b0574a37128f0813a782a474d9048a91cd91b6f1a5e0673c75fd13648d7b80              696 main/binary-amd64/Packages.gz
+SHA512:
+ 4b0f8458b814ab149c389318543b44339cd29147cb7dcacdf282eeafa56b31d144252faece384216e17d64391d97c2cfa67a5bfa8c16ed860fcbeeb48f65e079             1013 main/binary-amd64/Packages
+ 958ec93574032d4f5bb6757971021ab90e2b4b5c1524df97e6d97ae00c9ace651a2987580bfc1263203959d18a5114c802dfc3740aace71ca3ab71c4aa6395b1              696 main/binary-amd64/Packages.gz

@@ -1,0 +1,22 @@
+Package: morph
+Architecture: amd64
+Version: 0.2.0
+Priority: optional
+Section: utils
+Maintainer: Javier Midence <javier.midence22@gmail.com>
+Installed-Size: 32012
+Depends: libc6 (>= 2.39), libgcc-s1 (>= 4.2), libxkbcommon0 (>= 0.5.0), libwayland-client0
+Recommends: pulseaudio-utils | pipewire-pulse, wireplumber, gnome-keyring
+Suggests: gh
+Filename: pool/main/m/morph/morph_0.2.0_amd64.deb
+Size: 9442594
+MD5sum: 59f33485bdb6331683c957a73a814ee6
+SHA1: ed0c6d4955af36ce5537291a8d76df81f7eeea12
+SHA256: 2db1657fed3a1773785b82ff7c5942401f5c90b69c2dacce256622291691f695
+SHA512: ee0fe3ab537ded5fdfe6b5b39580924e1ffa3c4bed6b19e815971b5002db643351419b8020b0fafbdb3bbfdfe02925813a55b51443a4b7740db9d11e5c5008f5
+Homepage: https://github.com/jamthebest/morph
+Description: Dynamic island for the COSMIC desktop
+ Morph is a dynamic island that lives at the top of the COSMIC desktop.
+ It expands to show media playback, notifications, calendar, a file shelf,
+ workspaces and developer tools, and collapses when you are done.
+
